@@ -25,7 +25,7 @@ class Product
     #[ORM\Column(type: 'integer')]
     private $quantity;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $image;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'products')]
