@@ -5,21 +5,25 @@
 
 {% block body %}
 	<div class="row my-5">
-		<div class="col-md-5 mx-auto">
-			<div class="card-header">
 
-				<div class="card-body">
+		<div class="col-md-5 mx-auto">
+			<div class="card">
+				<div class="card-header">
 					<h1>Register</h1>
 				</div>
 
-				{{ form_start(registrationForm) }}
-				{{ form_row(registrationForm.username) }}
-				{{ form_row(registrationForm.plainPassword, { label: 'Password'}) }}
-				{{ form_row(registrationForm.agreeTerms) }}
+				<div class="card-body">
 
-				<button type="submit" class="btn btn-primary">Register</button>
-				{{ form_end(registrationForm) }}
 
+					{{ form_start(registrationForm) }}
+					{{ form_row(registrationForm.username) }}
+					{{ form_row(registrationForm.plainPassword, { label: 'Password'}) }}
+					{{ form_row(registrationForm.agreeTerms) }}
+
+					<button type="submit" class="btn btn-primary">Register</button>
+					{{ form_end(registrationForm) }}
+
+				</div>
 			</div>
 		</div>
 	</div>

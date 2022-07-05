@@ -20,16 +20,18 @@ class OrderController extends AbstractController
         $this->entityManager = $doctrine->getManager();
     }
 
-    #[Route('/order', name: 'app_order')]
+    #[Route('/order', name: 'orders_list')]
     public function index(): Response
     {
+
+        $orders = $this->orderRepository->findAll();
         return $this->render('order/index.html.twig', [
-            'controller_name' => 'OrderController',
+            'orders' => $orders,
         ]);
     }
 
-    #[Route('/user/orders', name: 'user_order_ list')]
-    public function userOrder(): Response
+    #[Route('/user/orders', name: 'user_order_list')]
+    public function userorders(): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
@@ -45,20 +47,61 @@ class OrderController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+
+        $orderExists = $this->orderRepository->findOneBy([
+            'user'=>$this->getUser(),
+            'pname'=>$product->getName()
+        ]);
+        if ($orderExists) {
+            $this->addFlash(
+                'warning',
+                'Your have already ordered this product'
+            );
+            return $this->redirectToRoute('user_order_list');
+        }
+
         $order = new Order();
         $order->setPname($product->getName());
         $order->setPrice($product->getPrice());
         $order->setStatus('processing...');
         $order->setUser($this->getUser());
-
-
-
-        $this->entityManager->persist($order);
+     $this->entityManager->persist($order);
         $this->entityManager->flush();
         $this->addFlash(
             'success',
             'Your order was saved'
         );
-        return $this->redirectToRoute('user_order_ list');
+
+        return $this->redirectToRoute('user_order_list');
+    }
+    #[Route('/update/order/{order}/{status}', name: 'order_status_update')]
+    public function orderupdate(Order $order,$status)
+    {
+
+        $order->setStatus($status);
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+        $this->addFlash(
+            'success',
+            'Your order status was updated'
+        );
+        return $this->redirectToRoute('orders_list');
+
+      
+    }
+    #[Route('/update/order/{order}', name: 'order_delete')]
+    public function orderdelete(Order $order)
+    {
+
+     
+        $this->entityManager->remove($order);
+        $this->entityManager->flush();
+        $this->addFlash(
+            'success',
+            'Your order  was deleted'
+        );
+        return $this->redirectToRoute('orders_list');
+
+      
     }
 }

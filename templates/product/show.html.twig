@@ -11,7 +11,7 @@
 			<div class="col-md-12">
 				<div class="my-3 d-flex justify-content-start  align-items-center">
 
-					<a href="{{path('order_store',{id: product.id})}}" class="btn btn-sm btn-outline-dark mx-1">Order now</a>
+					<a href="{{path('order_store',{product: product.id})}}" class="btn btn-sm btn-outline-dark mx-1">Order now</a>
 				</div>
 				<div class="row">
 					{% if product %}
